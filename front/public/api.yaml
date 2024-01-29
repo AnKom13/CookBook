@@ -1,0 +1,149 @@
+openapi: 3.0.0
+info:
+  title: Cook Book
+  description: Учебный пример по Django, React, Api
+  version: 0.0.1
+  
+servers:
+  - url: http://localhost:8000/api
+    description: Dev server
+
+paths:
+  /category/{id}:
+    get:
+      summary: Метод получения категории по  id
+      operationId: getCategoryById
+      tags:
+        - Category
+      parameters:
+        - name: id 
+          in: path
+          description: Id категории
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешный ответ c  рецептом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        'default':
+          description: ошибка!!!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error" 
+
+  /category:
+    get:
+      summary: Метод получения списка категорий
+      operationId: getAllCategory
+      tags:
+        - Category
+      responses:
+        '200':
+          description: Успешный ответ со списком категорий
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "#/components/schemas/Category"
+        'default':
+          description: Ошибка!!!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /category/{id}/recipe:
+    get:
+      summary: Метод получения списка рецептов по id категории
+      tags:
+        - Recipe
+      operationId: getRecipeListByIdCategory
+      parameters:
+        - name: id
+          in: path
+          description: Id категории
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Успешный ответ cо списком рецептов
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        'default':
+          description: ошибка!!!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"                
+  /recipe/{id}:
+    get:
+      summary: Метод получения рецепта по id рецепта
+      tags:
+        - Recipe
+      operationId: getRecipeById
+      parameters:
+        - name: id
+          in: path
+          description: Id категории
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешный ответ c  рецептом
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        'default':
+          description: ошибка!!!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"   
+
+components:
+  schemas:
+    Category:
+      type: object
+      required:
+        - name
+      properties:
+        category_id:
+          type: string
+        name:
+          type: string
+    Recipe:
+      type: object
+      required:
+        - name
+        - content
+        - category
+      properties:
+        recipe_id:
+          type: string
+        name:
+          type: string
+        content: 
+          type: string
+        category:
+          type: integer  
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
